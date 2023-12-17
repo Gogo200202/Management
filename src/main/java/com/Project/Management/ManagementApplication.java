@@ -1,24 +1,24 @@
 package com.Project.Management;
 
 
-import com.Project.Management.service.csvParserToProjects;
+import com.Project.Management.service.CsvParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
+import org.springframework.context.ApplicationContext;
 
 
 @SpringBootApplication
 public class ManagementApplication {
 
-
+	@Autowired
+	CsvParser csvParser;
 
 	public static void main(String[] args) {
 
-
-		SpringApplication.run(ManagementApplication.class, args);
+		ApplicationContext applicationContext = SpringApplication.run(ManagementApplication.class, args);
+		CsvParser service = applicationContext.getBean(CsvParser.class);
+		 var a= service.ParserToProjects();
 
 	}
 
