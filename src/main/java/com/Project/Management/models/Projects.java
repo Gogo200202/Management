@@ -1,18 +1,37 @@
 package com.Project.Management.models;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
-import javax.xml.crypto.Data;
-
-
+@Entity
+@Table(name = "Projects")
 public class Projects {
+
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long Id;
+
+
+    @Column(name = "Emp_ID")
     private Integer EmpID;
+
+    @Column(name = "Project_ID")
     private Integer ProjectID;
 
     // TODO add Data type
+
+    @Column(name = "Date_From")
     private String DateFrom;
 
+    @Column(name = "Date_To")
     private String DateTo;
+
+    public long getId() {
+        return Id;
+    }
+
+    public void setId(long id) {
+        Id = id;
+    }
 
     public int getEmpID() {
         return EmpID;

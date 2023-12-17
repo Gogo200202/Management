@@ -17,7 +17,7 @@ public class CsvParser {
 
 
 
-    public List<Projects> ParserToProjects(){
+    public List<Projects> ParserToProjectsFromCsvFile(){
 
         try {
             Resource resource = new ClassPathResource("SeededData/test.csv");
