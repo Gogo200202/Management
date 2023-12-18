@@ -2,6 +2,8 @@ package com.Project.Management.models;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "Projects")
 public class Projects {
@@ -17,13 +19,13 @@ public class Projects {
     @Column(name = "Project_ID")
     private Integer ProjectID;
 
-    // TODO add Data type
+
 
     @Column(name = "Date_From")
-    private String DateFrom;
+    private Date DateFrom;
 
     @Column(name = "Date_To")
-    private String DateTo;
+    private Date DateTo;
 
     public long getId() {
         return Id;
@@ -49,19 +51,19 @@ public class Projects {
         ProjectID = projectID;
     }
 
-    public String getDateFrom() {
+    public Date getDateFrom() {
         return DateFrom;
     }
 
-    public void setDateFrom(String dateFrom) {
+    public void setDateFrom(Date dateFrom) {
         DateFrom = dateFrom;
     }
 
-    public String getDateTo() {
+    public Date getDateTo() {
         return DateTo;
     }
 
-    public void setDateTo(String dateTo) {
+    public void setDateTo(Date dateTo) {
         DateTo = dateTo;
     }
 }

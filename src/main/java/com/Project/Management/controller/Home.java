@@ -15,10 +15,11 @@ public class Home {
         this.service=service;
     }
     @GetMapping("/All")
-    public List<Projects> test(){
-
+    public List<Projects> All(){
 
           return service.All();
     }
+
+
 
 }

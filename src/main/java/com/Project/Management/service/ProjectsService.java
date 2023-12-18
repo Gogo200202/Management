@@ -27,4 +27,11 @@ public class ProjectsService {
     public List<Projects> All(){
         return repositoryProjects.findAll();
     }
+
+
+    public void pairOfEmployeesWorkedTogether(){
+
+    }
+
+
 }

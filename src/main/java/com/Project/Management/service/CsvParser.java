@@ -7,6 +7,11 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -29,17 +34,23 @@ public class CsvParser {
                 String[] dataFromLine=in.next().split(",");
                 Projects project = new Projects();
                 // remove all empty or invisible  character
+
+                DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+
+
                 project.setEmpID(Integer.parseInt(dataFromLine[0].replaceAll("\\uFEFF", "").trim()));
                 project.setProjectID(Integer.parseInt(dataFromLine[1].replaceAll("\\uFEFF", "").trim()));
-                project.setDateFrom(dataFromLine[2].replaceAll("\\uFEFF", "").trim());
-                project.setDateTo(dataFromLine[3].replaceAll("\\uFEFF", "").trim());
+
+
+                project.setDateFrom(formatter.parse(dataFromLine[2].replaceAll("\\uFEFF", "").trim()));
+                project.setDateTo(formatter.parse(dataFromLine[3].replaceAll("\\uFEFF", "").trim()));
                 projects.add(project);
             }
             in.close();
 
             return projects;
 
-        } catch (IOException e) {
+        } catch (IOException | ParseException e) {
             throw new RuntimeException(e);
         }
 
