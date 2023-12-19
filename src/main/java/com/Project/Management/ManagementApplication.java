@@ -17,7 +17,8 @@ public class ManagementApplication {
 
 		ProjectsService service = applicationContext.getBean(ProjectsService.class);
 
-		service.SeedDataFromCsvFileToDataBase();
+		//service.SeedDataFromCsvFileToDataBase();
+		service.pairOfEmployeesWorkedTogether();
 
 	}
 

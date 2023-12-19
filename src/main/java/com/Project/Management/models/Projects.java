@@ -14,18 +14,18 @@ public class Projects {
 
 
     @Column(name = "Emp_ID")
-    private Integer EmpID;
+    private Integer empID;
 
     @Column(name = "Project_ID")
-    private Integer ProjectID;
+    private Integer projectID;
 
 
 
     @Column(name = "Date_From")
-    private Date DateFrom;
+    private Date datefrom;
 
     @Column(name = "Date_To")
-    private Date DateTo;
+    private Date dateto;
 
     public long getId() {
         return Id;
@@ -36,34 +36,34 @@ public class Projects {
     }
 
     public int getEmpID() {
-        return EmpID;
+        return empID;
     }
 
     public void setEmpID(int empID) {
-        EmpID = empID;
+        this.empID = empID;
     }
 
     public int getProjectID() {
-        return ProjectID;
+        return projectID;
     }
 
     public void setProjectID(int projectID) {
-        ProjectID = projectID;
+        this.projectID = projectID;
     }
 
-    public Date getDateFrom() {
-        return DateFrom;
+    public Date getDatefrom() {
+        return datefrom;
     }
 
-    public void setDateFrom(Date dateFrom) {
-        DateFrom = dateFrom;
+    public void setDatefrom(Date datefrom) {
+        this.datefrom = datefrom;
     }
 
-    public Date getDateTo() {
-        return DateTo;
+    public Date getDateto() {
+        return dateto;
     }
 
-    public void setDateTo(Date dateTo) {
-        DateTo = dateTo;
+    public void setDateto(Date dateto) {
+        this.dateto = dateto;
     }
 }

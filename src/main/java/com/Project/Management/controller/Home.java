@@ -15,9 +15,9 @@ public class Home {
         this.service=service;
     }
     @GetMapping("/All")
-    public List<Projects> All(){
+    public String All(){
 
-          return service.All();
+          return "5";
     }
 
 
