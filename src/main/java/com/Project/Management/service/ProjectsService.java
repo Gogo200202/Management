@@ -11,10 +11,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectsService {
@@ -37,48 +37,66 @@ public class ProjectsService {
 
 
 
-
-
     public void pairOfEmployeesWorkedTogether(){
 
         // projects id
-       List<Integer> AllProjectsIds = repositoryProjects.findDistinctProjectID();
-
+        List<Integer> AllProjectsIds = repositoryProjects.findDistinctProjectID();
         // project -> employ -> worked with
-        Map<Integer, HashMap<EmployIdAndTime,Integer>> projectToEmploys = new HashMap<>();
-        for (int i = 0; i <  AllProjectsIds.size(); i++) {
-         // get project by id
-            List<Projects> currentProject=repositoryProjects.findByprojectID(AllProjectsIds.get(i));
-            // add project to the map
-            projectToEmploys.put(currentProject.get(i).getProjectID(),new HashMap<>());
+        Map<Integer, HashMap<Integer,List<Projects>>> projectToEmploys = new HashMap<>();
+        //project-> employ -> time worked
+        Map<Integer,HashMap<Integer,Integer>> employTime=new HashMap<>();
 
-            for (int j = 0; j < currentProject.size(); j++) {
+        for (int i = 0; i < AllProjectsIds.size(); i++) {
+            // get project by id to get all employs who have worked on this project
+            List<Projects> currentProjects=repositoryProjects.findByprojectID(AllProjectsIds.get(i));
+            projectToEmploys.put(AllProjectsIds.get(i),new HashMap<>());
+            employTime.put(AllProjectsIds.get(i),new HashMap<>());
 
-                var currentEmploy=currentProject.get(j);
-             // get all employ that worked on this project at this
+            for (int j = 0; j < currentProjects.size(); j++) {
+
+                var currentEmploy=currentProjects.get(j);
+                long diff = Math.abs(currentEmploy.getDatefrom().getTime() - currentEmploy.getDateto().getTime());
+                long daysBetween = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                employTime.get(AllProjectsIds.get(i)).put(currentEmploy.getEmpID(),(int)daysBetween);
+                // get all employ that worked on this project at this
                 // specific time to get whit what other employs he has worked
                 var result=repositoryProjects.findBydatefromBetweenAndProjectID(currentEmploy.getDatefrom(),currentEmploy.getDateto(),currentEmploy.getProjectID());
-
                 // remove current employ from resul
-                result.remove(result.stream().filter(x->x.getEmpID()==currentEmploy.getEmpID()).findFirst().orElse(null));
-
                 if (!result.isEmpty()){
-                    for (int k = 0; k < result.size(); k++) {
-                            // if one have been more time then the other add them back
-                            EmployIdAndTime employIdAndTime = new EmployIdAndTime();
-                            employIdAndTime.setEmployId(currentEmploy.getEmpID());
-                            long diff = Math.abs(currentEmploy.getDatefrom().getTime() - currentEmploy.getDateto().getTime());
-                            long daysBetween = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-                            employIdAndTime.setTimeSpentOnProject((int) daysBetween);
 
-                            projectToEmploys.get(currentProject.get(i).getProjectID()).put(employIdAndTime, result.get(k).getEmpID());
+                    if(projectToEmploys.get(AllProjectsIds.get(i)).containsKey(currentEmploy.getEmpID())){
 
-                            EmployIdAndTime employIdAndTimeSecond = new EmployIdAndTime();
-                            long diffSecond = Math.abs(currentEmploy.getDatefrom().getTime() - currentEmploy.getDateto().getTime());
-                            long daysBetweenSecond = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-                            employIdAndTimeSecond.setTimeSpentOnProject((int) daysBetweenSecond);
-                            employIdAndTimeSecond.setEmployId(result.get(k).getEmpID());
-                            projectToEmploys.get(currentProject.get(i).getProjectID()).put(employIdAndTimeSecond, currentEmploy.getEmpID());
+                        for (int k = 0; k < result.size(); k++) {
+
+                            projectToEmploys.get(AllProjectsIds.get(i)).get(currentEmploy.getEmpID()).add(result.get(k));
+
+                        }
+                    }else {
+                        projectToEmploys.get(AllProjectsIds.get(i)).put(currentEmploy.getEmpID(),result);
+                        for (int k = 0; k < result.size(); k++) {
+
+                            if(currentEmploy.getDatefrom().before(result.get(k).getDatefrom())){
+
+                                if(projectToEmploys.get(AllProjectsIds.get(i)).containsKey(result.get(k).getEmpID())){
+                                    final int labelText = result.get(k).getEmpID() ;
+                                    Projects ifExist= projectToEmploys.get(AllProjectsIds.get(i)).get(currentEmploy.getEmpID()).stream().filter(x->x.getEmpID()==labelText).findFirst().orElse(null);
+
+                                    if(Objects.isNull(ifExist)){
+                                        projectToEmploys.get(AllProjectsIds.get(i)).get(currentEmploy.getEmpID()).add(result.get(k));
+                                    }
+
+                                }else {
+
+                                    List<Projects> p = new ArrayList<>();
+                                    p.add(currentEmploy);
+                                    projectToEmploys.get(AllProjectsIds.get(i)).put(result.get(k).getEmpID(),p);
+
+                                }
+
+                            }
+
+                        }
+
                     }
 
                 }
@@ -87,8 +105,35 @@ public class ProjectsService {
 
         }
 
+        Map<String,Integer> employTotalTimeThogether=new HashMap<>();
+        for (var projects :projectToEmploys.entrySet()){
+            for (var emp :projects.getValue().entrySet()){
+                for (int i = 0; i < emp.getValue().size(); i++) {
+                    if(emp.getKey()==emp.getValue().get(i).getEmpID()){
+                        continue;
+                    }
+                    var totalTimeForBoat=employTime.get(projects.getKey()).get(emp.getKey())+employTime.get(projects.getKey()).get(emp.getValue().get(i).getEmpID());
+                    employTotalTimeThogether.put(emp.getKey().toString()+" "+emp.getValue().get(i).getEmpID(),totalTimeForBoat);
+                }
 
+            }
+
+        }
+
+
+        Map<String, Integer> sortedMap =
+                employTotalTimeThogether.entrySet().stream()
+                        .sorted(Map.Entry.comparingByValue())
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                                (e1, e2) -> e2, LinkedHashMap::new));
+
+
+
+        Object firstKey = sortedMap.keySet().toArray()[sortedMap.keySet().toArray().length-1];
+        Object valueForFirstKey = sortedMap.get(firstKey);
+        System.out.printf(firstKey+" "+valueForFirstKey );
     }
+
 
 
 }
