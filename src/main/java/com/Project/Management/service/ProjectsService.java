@@ -20,7 +20,6 @@ public class ProjectsService implements ProjectsServiceCRUDInterface {
     public ProjectsService( CsvParser parser,RepositoryProjects repositoryProjects){
         this.parser=parser;
         this.repositoryProjects=repositoryProjects;
-
     }
 
     public void SeedDataFromCsvFileToDataBase(){
@@ -164,9 +163,12 @@ public class ProjectsService implements ProjectsServiceCRUDInterface {
     
     //Emp ->Employee
 
-    public  void DeleteById(int id){
-
-        repositoryProjects.deleteById((long)id);
+    public boolean DeleteById(int id){
+       if(repositoryProjects.existsById((long)id)){
+           repositoryProjects.deleteById((long)id);
+           return  false;
+       }
+          return  true;
     }
 
     public List<Projects> ReadAll(){
@@ -177,15 +179,21 @@ public class ProjectsService implements ProjectsServiceCRUDInterface {
         repositoryProjects.save(projects);
     }
 
-    public void UpdateEmp(int id , Projects projects){
+    public boolean UpdateEmp(int id , Projects projects){
 
-        Projects projectsToDelete=repositoryProjects.findById((long)id).orElse(null);
-        projectsToDelete.setId(projects.getId());
-        projectsToDelete.setEmpID(projects.getEmpID());
-        projectsToDelete.setProjectID(projects.getProjectID());
-        projectsToDelete.setDatefrom(projects.getDatefrom());
-        projectsToDelete.setDateto(projects.getDateto());
-        repositoryProjects.save(projectsToDelete);
+
+        Projects projectsToUpdate=repositoryProjects.findById((long)id).orElse(null);
+        if(Objects.isNull(projectsToUpdate)){
+            return true;
+        }
+        projectsToUpdate.setId(projects.getId());
+        projectsToUpdate.setEmpID(projects.getEmpID());
+        projectsToUpdate.setProjectID(projects.getProjectID());
+        projectsToUpdate.setDatefrom(projects.getDatefrom());
+        projectsToUpdate.setDateto(projects.getDateto());
+        repositoryProjects.save(projectsToUpdate);
+
+        return false;
     }
 
 

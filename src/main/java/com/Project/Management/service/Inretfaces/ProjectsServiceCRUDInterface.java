@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface ProjectsServiceCRUDInterface {
 
-    public  void DeleteById(int id);
+    public  boolean DeleteById(int id);
     public List<Projects> ReadAll();
 
     public void AddEmp(Projects projects);
-    public void UpdateEmp(int id , Projects projects);
+    public boolean UpdateEmp(int id , Projects projects);
 }

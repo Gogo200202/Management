@@ -2,7 +2,9 @@ package com.Project.Management.controller;
 
 import com.Project.Management.models.Projects;
 import com.Project.Management.service.ProjectsService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -25,12 +27,22 @@ public class HomeController {
 
     @DeleteMapping("/Delete")
     public void Delete( @RequestParam int id){
-        service.DeleteById(id);
+        boolean result =service.DeleteById(id);
+        if(result){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found"
+            );
+        }
     }
 
     @PutMapping("/Update")
     public void Update( @RequestParam int id ,@RequestBody Projects projects){
-        service.UpdateEmp(id,projects);
+        boolean result= service.UpdateEmp(id,projects);
+        if(result){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found"
+            );
+        }
     }
 
     @GetMapping("/pairOfEmployeesWorkedTogetherForTheLongestPeriodOfTime")
