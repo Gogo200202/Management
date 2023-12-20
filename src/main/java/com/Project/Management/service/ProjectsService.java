@@ -3,6 +3,7 @@ package com.Project.Management.service;
 import com.Project.Management.models.Projects;
 import com.Project.Management.repository.RepositoryProjects;
 
+import com.Project.Management.service.Inretfaces.ProjectsServiceCRUDInterface;
 import com.Project.Management.util.CsvParser;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
-public class ProjectsService {
+public class ProjectsService implements ProjectsServiceCRUDInterface {
 
     CsvParser parser;
     RepositoryProjects repositoryProjects;
@@ -129,9 +130,9 @@ public class ProjectsService {
 
     //Emp ->Employee
 
-    public  void DeleteEmp(int id){
-        Projects projectsToDelete=repositoryProjects.findByempID(id);
-        repositoryProjects.delete(projectsToDelete);
+    public  void DeleteById(int id){
+
+        repositoryProjects.deleteById((long)id);
     }
 
     public List<Projects> ReadAll(){
@@ -143,7 +144,8 @@ public class ProjectsService {
     }
 
     public void UpdateEmp(int id , Projects projects){
-        Projects projectsToDelete=repositoryProjects.findByempID(id);
+
+        Projects projectsToDelete=repositoryProjects.findById((long)id).orElse(null);
         projectsToDelete.setId(projects.getId());
         projectsToDelete.setEmpID(projects.getEmpID());
         projectsToDelete.setProjectID(projects.getProjectID());
