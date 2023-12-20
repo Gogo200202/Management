@@ -2,18 +2,12 @@ package com.Project.Management.service;
 
 import com.Project.Management.models.Projects;
 import com.Project.Management.repository.RepositoryProjects;
-import com.Project.Management.utils.EmployIdAndTime;
+
+import com.Project.Management.util.CsvParser;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,10 +28,7 @@ public class ProjectsService {
 
     }
 
-
-
-
-    public void pairOfEmployeesWorkedTogether(){
+    public String pairOfEmployeesWorkedTogether(){
 
         // projects id
         List<Integer> AllProjectsIds = repositoryProjects.findDistinctProjectID();
@@ -131,7 +122,9 @@ public class ProjectsService {
 
         Object firstKey = sortedMap.keySet().toArray()[sortedMap.keySet().toArray().length-1];
         Object valueForFirstKey = sortedMap.get(firstKey);
-        System.out.printf(firstKey+" "+valueForFirstKey );
+
+        return firstKey+" "+valueForFirstKey;
+
     }
 
 

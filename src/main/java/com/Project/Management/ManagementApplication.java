@@ -1,7 +1,6 @@
 package com.Project.Management;
 
 
-import com.Project.Management.service.CsvParser;
 import com.Project.Management.service.ProjectsService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,8 +16,8 @@ public class ManagementApplication {
 
 		ProjectsService service = applicationContext.getBean(ProjectsService.class);
 
-		//service.SeedDataFromCsvFileToDataBase();
-		service.pairOfEmployeesWorkedTogether();
+		service.SeedDataFromCsvFileToDataBase();
+
 
 	}
 
