@@ -124,10 +124,44 @@ public class ProjectsService implements ProjectsServiceCRUDInterface {
         Object firstKey = sortedMap.keySet().toArray()[sortedMap.keySet().toArray().length-1];
         Object valueForFirstKey = sortedMap.get(firstKey);
 
-        return firstKey+" "+valueForFirstKey;
+
+
+        String[] employs=firstKey.toString().split(" ");
+        Integer emp1=Integer.parseInt(employs[0]);
+        Integer emp2=Integer.parseInt(employs[1]);
+        Map<Integer,Integer> Emp1WorkedOn= getEmployeesProjectsTimeWorked(projectToEmploys, emp1, employTime);
+        Map<Integer,Integer> Emp2WorkedOn= getEmployeesProjectsTimeWorked(projectToEmploys, emp2, employTime);
+
+        StringBuilder sb= new StringBuilder();
+        sb.append(firstKey).append(" Total hours worked ").append(valueForFirstKey).append("\n");
+        for (var projects : Emp1WorkedOn.entrySet()){
+            sb.append("Employee id ").append(emp1).append("Project id").append(projects.getKey()).append(" Time").append(projects.getValue()).append("\n");
+        }
+
+        for (var projects : Emp2WorkedOn.entrySet()){
+            sb.append("Employee id ").append(emp2).append("Project id").append(projects.getKey()).append(" Time").append(projects.getValue()).append("\n");
+        }
+
+
+        return sb.toString() ;
 
     }
 
+    private Map<Integer,Integer> getEmployeesProjectsTimeWorked(Map<Integer, HashMap<Integer, List<Projects>>> projectToEmploys, Integer emp1, Map<Integer, HashMap<Integer, Integer>> employTime) {
+        Map<Integer,Integer> projectHoursForEmp=new HashMap<>();
+        for (var projects : projectToEmploys.entrySet()){
+
+            if(projects.getValue().containsKey(emp1)){
+                Integer p = employTime.get(projects.getKey()).get(emp1);
+                projectHoursForEmp.put(projects.getKey(),p);
+            }
+
+        }
+
+        return projectHoursForEmp;
+    }
+
+    
     //Emp ->Employee
 
     public  void DeleteById(int id){

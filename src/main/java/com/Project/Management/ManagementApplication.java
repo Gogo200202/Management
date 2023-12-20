@@ -15,8 +15,7 @@ public class ManagementApplication {
 		ApplicationContext applicationContext = SpringApplication.run(ManagementApplication.class, args);
 
 		ProjectsService service = applicationContext.getBean(ProjectsService.class);
-		//service.SeedDataFromCsvFileToDataBase();
-
+		service.SeedDataFromCsvFileToDataBase();
 
 	}
 
