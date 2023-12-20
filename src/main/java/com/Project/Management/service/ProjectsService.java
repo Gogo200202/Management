@@ -135,11 +135,11 @@ public class ProjectsService implements ProjectsServiceCRUDInterface {
         StringBuilder sb= new StringBuilder();
         sb.append(firstKey).append(" Total hours worked ").append(valueForFirstKey).append("\n");
         for (var projects : Emp1WorkedOn.entrySet()){
-            sb.append("Employee id ").append(emp1).append("Project id").append(projects.getKey()).append(" Time").append(projects.getValue()).append("\n");
+            sb.append("Employee id ").append(emp1).append("Project id ").append(projects.getKey()).append(" Time ").append(projects.getValue()).append("\n");
         }
 
         for (var projects : Emp2WorkedOn.entrySet()){
-            sb.append("Employee id ").append(emp2).append("Project id").append(projects.getKey()).append(" Time").append(projects.getValue()).append("\n");
+            sb.append("Employee id ").append(emp2).append("Project id ").append(projects.getKey()).append(" Time ").append(projects.getValue()).append("\n");
         }
 
 
