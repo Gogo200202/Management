@@ -1,7 +1,13 @@
 # Management system application
 This is project for importing the csv file into database and working with it 
 
-## Routes List:
+## Problem
+Create an application that identifies the pair
+of employees who have worked together 
+on common projects for the longest period of 
+time and the time for each of those projects.
+
+## Routes List
 
 | Method   | URI        | Action                                                                                       |
 |----------|------------|----------------------------------------------------------------------------------------------|
@@ -11,7 +17,7 @@ This is project for importing the csv file into database and working with it
 | `GET`    | `All`      | `App\Http\Controllers\HomeController@All `                                                   |
 | `GET`    | `pairOfEmployeesWorkedTogetherForTheLongestPeriodOfTime` | `App\Http\Controllers\HomeController@pairOfEmployeesWorkedTogetherForTheLongestPeriodOfTime` |  
 
-## Algorithm:
+## Algorithm
 First we get all the project id from the database so that we can use
 the id for lather. We create Map for storing projects to employees and
 the employees that he worked with. We get with who he was worked with
