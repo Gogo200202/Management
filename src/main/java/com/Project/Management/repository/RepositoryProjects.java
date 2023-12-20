@@ -18,6 +18,7 @@ public interface RepositoryProjects extends JpaRepository<Projects, Long> {
     List<Integer> findDistinctProjectID();
 
     List<Projects>findByprojectID(int id);
+    Projects findByempID(int id);
 
     List<Projects> findBydatefromBetweenAndProjectID(Date start, Date end,int id);
 

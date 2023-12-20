@@ -28,7 +28,7 @@ public class ProjectsService {
 
     }
 
-    public String pairOfEmployeesWorkedTogether(){
+    public String pairOfEmployeesWorkedTogetherForTheLongestPeriodOfTime(){
 
         // projects id
         List<Integer> AllProjectsIds = repositoryProjects.findDistinctProjectID();
@@ -125,6 +125,31 @@ public class ProjectsService {
 
         return firstKey+" "+valueForFirstKey;
 
+    }
+
+    //Emp ->Employee
+
+    public  void DeleteEmp(int id){
+        Projects projectsToDelete=repositoryProjects.findByempID(id);
+        repositoryProjects.delete(projectsToDelete);
+    }
+
+    public List<Projects> ReadAll(){
+     return repositoryProjects.findAll();
+    }
+
+    public void AddEmp(Projects projects){
+        repositoryProjects.save(projects);
+    }
+
+    public void UpdateEmp(int id , Projects projects){
+        Projects projectsToDelete=repositoryProjects.findByempID(id);
+        projectsToDelete.setId(projects.getId());
+        projectsToDelete.setEmpID(projects.getEmpID());
+        projectsToDelete.setProjectID(projects.getProjectID());
+        projectsToDelete.setDatefrom(projects.getDatefrom());
+        projectsToDelete.setDateto(projects.getDateto());
+        repositoryProjects.save(projectsToDelete);
     }
 
 
